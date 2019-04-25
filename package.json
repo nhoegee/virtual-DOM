@@ -1,0 +1,32 @@
+{
+  "name": "virtual-dom",
+  "version": "1.0.0",
+  "description": "A simple Virtual DOM to understand how it works",
+  "main": "index.ts",
+  "scripts": {
+    "start": "parcel src/index.html",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "parcel build index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nhoegee/virtual-DOM.git"
+  },
+  "keywords": [
+    "Virtual",
+    "DOM"
+  ],
+  "author": "Nigel Hoegee",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nhoegee/virtual-DOM/issues"
+  },
+  "homepage": "https://github.com/nhoegee/virtual-DOM#readme",
+  "devDependencies": {
+    "parcel-bundler": "^1.12.3",
+    "typescript": "^3.4.5"
+  },
+  "dependencies": {
+    "mdn-polyfills": "^5.16.0"
+  }
+}
