@@ -32,7 +32,8 @@ const differenceBetweenAttributes = (oldAttributes: object, newAttributes: objec
 }
 
 const differenceBetweenChildren = (oldVChildren: VirtualNode[], newVChildren: VirtualNode[]) => {
-  const childPatches = [];
+  const childPatches: (($node: ChildNode | HTMLElement | Text) => HTMLElement | Text)[] = [];
+
 
   oldVChildren.forEach((oldVChild, i) => {
     const newVChild = newVChildren[i];
@@ -40,7 +41,7 @@ const differenceBetweenChildren = (oldVChildren: VirtualNode[], newVChildren: Vi
     childPatches.push(differenceBetween(oldVChild, newVChild));
   });
 
-  const additionalPatches = [];
+  const additionalPatches: (($node: HTMLElement | Text) => HTMLElement | Text)[] = [];
 
   for (const additionalVChild of newVChildren.slice(oldVChildren.length)) {
     additionalPatches.push(($node: HTMLElement | Text) => {
@@ -61,9 +62,9 @@ const differenceBetweenChildren = (oldVChildren: VirtualNode[], newVChildren: Vi
   };
 }
 
-export const differenceBetween = (oldVTree: VirtualNode, newVTree: VirtualNode): ($node: HTMLElement | Text) => HTMLElement | Text => {
+export const differenceBetween = (oldVTree: VirtualNode, newVTree: VirtualNode): ($node: ChildNode | HTMLElement | Text) => HTMLElement | Text => {
   if (newVTree === undefined) {
-    return ($node: HTMLElement | Text) => {
+    return ($node: ChildNode | HTMLElement | Text) => {
       $node.remove();
 
       return undefined;
@@ -72,7 +73,7 @@ export const differenceBetween = (oldVTree: VirtualNode, newVTree: VirtualNode):
 
   if (typeof oldVTree === 'string' || typeof newVTree === 'string') {
     if (oldVTree !== newVTree) {
-      return ($node: HTMLElement | Text) => {
+      return ($node: ChildNode | HTMLElement | Text): HTMLElement | Text => {
          const $newNode = render(newVTree);
          $node.replaceWith($newNode);
 
@@ -84,7 +85,7 @@ export const differenceBetween = (oldVTree: VirtualNode, newVTree: VirtualNode):
   }
 
   if (oldVTree.tagName !== newVTree.tagName) {
-    return ($node: HTMLElement | Text) => {
+    return ($node: ChildNode | HTMLElement | Text): HTMLElement | Text => {
       const $newNode = render(newVTree);
       $node.replaceWith($newNode);
 
@@ -95,7 +96,7 @@ export const differenceBetween = (oldVTree: VirtualNode, newVTree: VirtualNode):
   const patchAttributes = differenceBetweenAttributes(oldVTree.attributes, newVTree.attributes);
   const patchChildren = differenceBetweenChildren(oldVTree.children, newVTree.children);
 
-  return ($node: HTMLElement) => {
+  return ($node: HTMLElement): HTMLElement => {
     patchAttributes($node);
     patchChildren($node);
 
